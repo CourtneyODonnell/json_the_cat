@@ -1,26 +1,24 @@
 //require request
 const request = require('request');
-//Use Node's fs (file system) module to write the file (enables interacting with the file system)
-const args = process.argv.slice(2);
-//accept arguments from command line and slice first two irrelevant arguments
-const breedName = args[0];
 
-
-const fetchBreedDescription = function(breedName) {
+const fetchBreedDescription = function(breedName, callback) {
 
   request(`http://api.thecatapi.com/v1/breeds/search?q=${breedName}`, (error, response, body) => {
-
-  if (error) {
-    console.log(error);
-    return;
-    }
+    if (error) {
+      callback(error);
+      return;
+    } else {
     //turn JSON to object
     const data = JSON.parse(body);
       if(data.length === 0) {
-        console.log('Breed not found, please try again.');
+        error = 'Breed not found, please try again.';
+        callback(error);
       } else {
-        console.log(data[0].description);
+        callback(error, data[0].description);
       }
+    }
   });
 };
-fetchBreedDescription(breedName);
+//fetchBreedDescription(breedName, callback);
+
+module.exports = { fetchBreedDescription };
