@@ -1,3 +1,5 @@
+// breedFetcherTest.js
+
 const { fetchBreedDescription } = require('../breedFetcher');
 const { assert } = require('chai');
 
@@ -15,4 +17,17 @@ describe('fetchBreedDescription', () => {
       done();
     });
   });
+
+  it('returns an error where an invalid/non-existent breed is passed in', (done) => {
+    fetchBreedDescription('Jimmy', (err, desc) => {
+      // we expect an error for this scenario
+      assert.equal(err, "Breed not found, please try again.");
+
+      assert.equal(null, desc);
+
+      done();
+    });
+  });
+
 });
+
